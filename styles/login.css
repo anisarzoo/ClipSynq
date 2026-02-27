@@ -1,0 +1,1128 @@
+/* ===========================
+   LOGIN PAGE STYLES - MODERN TWO-COLUMN DESIGN
+   =========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page Background - Scroll Free */
+.login-page {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* Animated Background Pattern */
+.login-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: moveBackground 30s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes moveBackground {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+/* Header Bar */
+.login-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 10;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+.header-logo i {
+    font-size: 28px;
+}
+
+.install-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.install-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.install-btn i {
+    font-size: 16px;
+}
+
+/* Main Container - Scroll Free */
+.login-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Login Box - Two Column - No Scroll */
+.login-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    max-width: 900px;
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    overflow: hidden;
+}
+
+/* Left Side - Branding */
+.login-left {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    padding: 60px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.login-branding {
+    text-align: center;
+}
+
+.brand-logo {
+    font-size: 60px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-branding h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.login-branding > p {
+    font-size: 16px;
+    opacity: 0.95;
+    margin-bottom: 32px;
+    line-height: 1.5;
+}
+
+.features-list {
+    list-style: none;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.features-list li:last-child {
+    margin-bottom: 0;
+}
+
+.features-list i {
+    font-size: 18px;
+    color: #22c55e;
+}
+
+/* Right Side - Form - No Scroll */
+.login-right {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.login-right::-webkit-scrollbar {
+    width: 6px;
+}
+
+.login-right::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.login-right::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 3px;
+}
+
+.login-right::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5);
+}
+
+.error-msg {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    border-left: 4px solid #dc2626;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-msg i {
+    flex-shrink: 0;
+}
+
+.success-msg {
+    background: #dcfce7;
+    color: #15803d;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    border-left: 4px solid #22c55e;
+    animation: slideDown 0.3s ease;
+}
+
+.success-msg i {
+    flex-shrink: 0;
+}
+
+/* Tabs */
+.login-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    color: #3b82f6;
+}
+
+.tab-btn.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+}
+
+.tab-btn i {
+    font-size: 16px;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.form-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 16px;
+}
+
+/* Google Button */
+.google-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    color: #1f2937;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.google-btn:hover {
+    border-color: #3b82f6;
+    background: #f8fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* Divider */
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    color: #9ca3af;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e5e7eb;
+    z-index: -1;
+}
+
+.divider::after {
+    content: attr(data-text);
+    background: white;
+    padding: 0 10px;
+}
+
+/* Form Group - Compact */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 4px;
+}
+
+.form-group label i {
+    margin-right: 4px;
+    color: #3b82f6;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: white;
+    color: #1f2937;
+}
+
+.form-input:hover {
+    border-color: #d1d5db;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: #f0f9ff;
+}
+
+.form-input::placeholder {
+    color: #9ca3af;
+}
+
+.form-input:disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Password Wrapper */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .form-input {
+    padding-right: 42px;
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+.toggle-password-btn:hover {
+    background: #f3f4f6;
+    color: #3b82f6;
+}
+
+/* Password Strength Indicator */
+.password-strength-wrapper {
+    margin-top: 8px;
+    display: none;
+}
+
+.password-strength-wrapper.show {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-strength-bar {
+    flex: 1;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.password-strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    background-color: #ef4444;
+}
+
+.password-strength-text {
+    font-size: 12px;
+    color: #6b7280;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Form Options */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 16px 0 20px 0;
+    gap: 12px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #4b5563;
+    user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #3b82f6;
+}
+
+.forgot-link-btn {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 0;
+    text-decoration: none;
+}
+
+.forgot-link-btn:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+/* Button Group - Compact */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    margin-bottom: 12px;
+}
+
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+    width: 200px;
+    height: 200px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+    border-color: #d1d5db;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Signup Link */
+.signup-link {
+    text-align: center;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.link-btn:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+/* QR Scanner */
+.qr-scanner-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.qr-reader {
+    width: 100%;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    overflow: hidden;
+    background: #f9fafb;
+    min-height: 300px;
+}
+
+.scan-status {
+    text-align: center;
+    padding: 16px;
+    background: #f0f7ff;
+    border-radius: 8px;
+    color: #3b82f6;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: #3b82f6;
+}
+
+/* Download Modal */
+.download-modal-content h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.download-modal-content h2 i {
+    color: #3b82f6;
+    font-size: 24px;
+}
+
+.download-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.download-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+}
+
+.download-link:hover {
+    background: #f0f7ff;
+    border-color: #3b82f6;
+    transform: translateX(4px);
+}
+
+.download-link i {
+    font-size: 24px;
+    color: #3b82f6;
+}
+
+.download-label {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.download-desc {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.pwa-link {
+    background: white;
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+}
+
+.pwa-link:hover {
+    background: #f0f7ff;
+}
+
+/* Device Modal */
+.device-modal-content h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.device-modal-content h2 i {
+    color: #3b82f6;
+    font-size: 24px;
+}
+
+.modal-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.device-hint {
+    font-size: 13px;
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.device-hint i {
+    color: #60a5fa;
+    font-size: 14px;
+}
+
+/* ===========================
+   TABLET LAYOUT (768px - 1024px)
+   =========================== */
+@media (max-width: 1024px) {
+    .login-box {
+        grid-template-columns: 1fr;
+        max-height: 95vh;
+        height: auto;
+    }
+
+    .login-left {
+        display: none;
+    }
+
+    .login-right {
+        padding: 35px 30px;
+        overflow-y: auto;
+        max-height: 95vh;
+    }
+
+    .form-title {
+        font-size: 20px;
+    }
+
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .forgot-link-btn {
+        align-self: flex-end;
+    }
+
+    .login-header-bar {
+        padding: 16px 24px;
+    }
+
+    .header-logo {
+        font-size: 20px;
+    }
+
+    .header-logo i {
+        font-size: 24px;
+    }
+
+    .install-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
+
+/* ===========================
+   MOBILE LAYOUT (< 768px)
+   =========================== */
+@media (max-width: 768px) {
+    .login-page::before {
+        display: none;
+    }
+
+    .login-header-bar {
+        padding: 12px 16px;
+    }
+
+    .header-logo {
+        font-size: 18px;
+        gap: 8px;
+    }
+
+    .header-logo i {
+        font-size: 22px;
+    }
+
+    .install-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .install-btn i {
+        font-size: 14px;
+    }
+
+    .login-container {
+        padding: 20px 12px;
+    }
+
+    .login-box {
+        border-radius: 12px;
+        max-height: calc(100vh - 80px);
+    }
+
+    .login-right {
+        padding: 24px 16px;
+        overflow-y: auto;
+    }
+
+    .form-title {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .form-input {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .tab-btn {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .tab-btn i {
+        font-size: 14px;
+    }
+
+    .google-btn {
+        font-size: 14px;
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .qr-reader {
+        min-height: 250px;
+    }
+
+    .modal-content {
+        padding: 24px;
+        max-width: 90%;
+    }
+
+    .device-modal-content h2 {
+        font-size: 18px;
+        gap: 8px;
+    }
+
+    .device-modal-content h2 i {
+        font-size: 20px;
+    }
+}
+
+/* ===========================
+   SMALL MOBILE (< 480px)
+   =========================== */
+@media (max-width: 480px) {
+    .login-header-bar {
+        padding: 16px 20px;
+        gap: 10px;
+    }
+
+    .header-logo {
+        font-size: 18px;
+        gap: 8px;
+    }
+
+    .header-logo i {
+        font-size: 22px;
+    }
+
+    .install-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .login-container {
+        padding: 0;
+        height: 100vh;
+        max-height: 100vh;
+    }
+
+    .login-box {
+        border-radius: 0;
+        max-height: calc(100vh - 62px);
+        height: auto;
+        overflow: hidden;
+    }
+
+    .login-right {
+        padding: 24px 16px;
+        overflow-y: auto;
+        max-height: calc(100vh - 62px);
+    }
+
+    .form-title {
+        font-size: 18px;
+        margin-bottom: 14px;
+    }
+
+    .google-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+        margin-bottom: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    .form-input {
+        padding: 11px 14px;
+        font-size: 16px;
+    }
+
+    .toggle-password-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .password-strength-text {
+        font-size: 11px;
+    }
+
+    .form-options {
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 12px 0 16px 0;
+    }
+
+    .checkbox-label {
+        font-size: 13px;
+    }
+
+    .forgot-link-btn {
+        font-size: 13px;
+    }
+
+    .button-group {
+        margin-top: 14px;
+        margin-bottom: 12px;
+    }
+
+    .btn {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .login-tabs {
+        margin-bottom: 16px;
+    }
+
+    .tab-btn {
+        font-size: 12px;
+        padding: 10px 8px;
+        gap: 4px;
+    }
+
+    .tab-btn i {
+        font-size: 14px;
+    }
+
+    .divider {
+        margin: 14px 0;
+        font-size: 13px;
+    }
+
+    .signup-link {
+        font-size: 13px;
+    }
+
+    .qr-reader {
+        min-height: 200px;
+    }
+
+    .modal-content {
+        padding: 16px;
+        max-width: 90%;
+    }
+
+    .device-modal-content h2 {
+        font-size: 16px;
+    }
+
+    .device-modal-content h2 i {
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share via ClipSynq - Scan QR</title>
+    
+    <!-- Favicon & App Logo -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="app.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="description" content="Share messages to ClipSynq - Scan QR Code">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/login.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <!-- Header -->
+            <div class="login-header">
+                <img src="app.png" alt="ClipSynq" class="login-logo">
+                <h1>Share via ClipSynq</h1>
+                <p class="login-subtitle">Scan QR Code to send message</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="login-content">
+                <!-- Scanner Tab -->
+                <div id="scannerView" style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- QR Scanner -->
+                    <div id="qrReader" style="width: 100%; border-radius: 12px; overflow: hidden;"></div>
+                    
+                    <!-- Status -->
+                    <div id="scanStatus" style="text-align: center; padding: 16px; background: #f0f9ff; border-radius: 8px; color: #0ea5e9; font-size: 14px;">
+                        <i class="fas fa-camera"></i> Ready to scan
+                    </div>
+
+                    <!-- Upload Form (shown after scan) -->
+                    <div id="uploadForm" style="display: none; gap: 16px; flex-direction: column;">
+                        <div style="padding: 12px; background: #dcfce7; border-radius: 8px; color: #166534; font-size: 14px; text-align: center;">
+                            <i class="fas fa-check-circle"></i> <span id="qrSessionInfo">QR Code scanned successfully</span>
+                        </div>
+
+                        <!-- Message Input -->
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="messageInput" style="font-weight: 600; color: #1f2937; font-size: 14px;">
+                                Message / Clipboard
+                            </label>
+                            <textarea 
+                                id="messageInput" 
+                                placeholder="Paste your message or clipboard content here..."
+                                style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 100px; max-height: 300px;"
+                            ></textarea>
+                        </div>
+
+                        <!-- Paste Button -->
+                        <button id="pasteBtn" style="width: 100%; padding: 12px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer; font-weight: 600; color: #374151; transition: all 0.2s;">
+                            <i class="fas fa-paste"></i> Paste from Clipboard
+                        </button>
+
+                        <!-- Send Button -->
+                        <button id="sendBtn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: all 0.2s;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+
+                        <!-- Back Button -->
+                        <button id="backBtn" style="width: 100%; padding: 12px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer; font-weight: 600; color: #6b7280; transition: all 0.2s;">
+                            <i class="fas fa-arrow-left"></i> Scan Another
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successView" style="display: none; text-align: center; padding: 40px 20px;">
+                    <i class="fas fa-check-circle" style="font-size: 64px; color: #10b981; margin-bottom: 20px;"></i>
+                    <h2 style="color: #10b981; margin-bottom: 8px;">Message Sent!</h2>
+                    <p style="color: #6b7280; margin-bottom: 24px;">Your message has been delivered to the ClipSynq user</p>
+                    <button id="sendAnotherBtn" style="width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        <i class="fas fa-redo"></i> Send Another Message
+                    </button>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorView" style="display: none; text-align: center; padding: 40px 20px;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 64px; color: #ef4444; margin-bottom: 20px;"></i>
+                    <h2 style="color: #ef4444; margin-bottom: 8px;">Error</h2>
+                    <p id="errorMessage" style="color: #6b7280; margin-bottom: 24px;">Something went wrong</p>
+                    <button id="retryBtn" style="width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="text-align: center; padding-top: 16px; border-top: 1px solid #e5e7eb; color: #9ca3af; font-size: 12px;">
+                <p>Make sure the person sharing has their QR code visible</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+    <script src="js/firebase-config.js" type="module"></script>
+    
+    <!-- QR Share Handler -->
+    <script type="module">
+        import { database } from './js/firebase-config.js';
+        import { ref, get, push, set } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        let currentQrData = null;
+        let html5QrcodeScanner = null;
+
+        // Initialize QR Scanner
+        function initScanner() {
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "qrReader",
+                { 
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                },
+                false
+            );
+
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        }
+
+        async function onScanSuccess(decodedText) {
+            try {
+                currentQrData = JSON.parse(decodedText);
+                
+                if (currentQrData.type !== 'ClipSynq-share' && currentQrData.type !== 'ClipSynq-login') {
+                    throw new Error('Invalid QR code type');
+                }
+
+                // Stop scanner
+                html5QrcodeScanner.pause();
+                
+                // Show upload form
+                document.getElementById('scannerView').style.display = 'none';
+                document.getElementById('uploadForm').style.display = 'flex';
+                document.getElementById('qrSessionInfo').textContent = `QR Code scanned - Ready to send`;
+                
+                // Focus message input
+                setTimeout(() => {
+                    document.getElementById('messageInput').focus();
+                }, 100);
+                
+            } catch (error) {
+                console.error('QR parse error:', error);
+                showStatus('Invalid QR code. Please try again.', 'error');
+            }
+        }
+
+        function onScanFailure(error) {
+            // Ignore scan failures, they're normal when no QR is detected
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('scanStatus');
+            const colors = {
+                'success': '#dcfce7',
+                'error': '#fee2e2',
+                'info': '#f0f9ff'
+            };
+            const textColors = {
+                'success': '#166534',
+                'error': '#991b1b',
+                'info': '#0ea5e9'
+            };
+            const icons = {
+                'success': 'check-circle',
+                'error': 'exclamation-circle',
+                'info': 'camera'
+            };
+            
+            status.style.background = colors[type] || colors['info'];
+            status.style.color = textColors[type] || textColors['info'];
+            status.innerHTML = `<i class="fas fa-${icons[type] || 'camera'}"></i> ${message}`;
+        }
+
+        // Paste Button
+        document.getElementById('pasteBtn').addEventListener('click', async () => {
+            try {
+                if (!navigator.clipboard?.readText) {
+                    alert('Please paste manually using Ctrl+V');
+                    document.getElementById('messageInput').focus();
+                    return;
+                }
+                const text = await navigator.clipboard.readText();
+                document.getElementById('messageInput').value = text;
+                document.getElementById('messageInput').focus();
+            } catch (error) {
+                alert('Unable to access clipboard. Please paste manually.');
+            }
+        });
+
+        // Send Button
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+        async function sendMessage() {
+            const message = document.getElementById('messageInput').value.trim();
+            
+            if (!message) {
+                alert('Please enter a message');
+                return;
+            }
+
+            if (!currentQrData || !currentQrData.userId) {
+                alert('Invalid QR session. Please scan again.');
+                return;
+            }
+
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                const userId = currentQrData.userId;
+                
+                // Add message to inbox folder
+                const folderPath = `users/${userId}/folders/inbox`;
+                const folderRef = ref(database, folderPath);
+                const folderSnapshot = await get(folderRef);
+                
+                // Create inbox if it doesn't exist
+                if (!folderSnapshot.exists()) {
+                    await set(folderRef, {
+                        name: 'All Messages',
+                        icon: 'inbox'
+                    });
+                }
+                
+                // Add message
+                const messagesRef = ref(database, `${folderPath}/messages`);
+                await push(messagesRef, {
+                    text: message,
+                    timestamp: Date.now(),
+                    pinned: false,
+                    starred: false,
+                    deviceId: 'guest-share',
+                    sharedBy: currentQrData.sharedByName || 'Guest User'
+                });
+
+                // Show success
+                document.getElementById('uploadForm').style.display = 'none';
+                document.getElementById('successView').style.display = 'block';
+                currentQrData = null;
+
+            } catch (error) {
+                console.error('Send error:', error);
+                document.getElementById('uploadForm').style.display = 'none';
+                document.getElementById('errorView').style.display = 'block';
+                document.getElementById('errorMessage').textContent = 'Failed to send message. ' + error.message;
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+            }
+        }
+
+        // Back Button
+        document.getElementById('backBtn').addEventListener('click', () => {
+            document.getElementById('uploadForm').style.display = 'none';
+            document.getElementById('scannerView').style.display = 'flex';
+            document.getElementById('messageInput').value = '';
+            currentQrData = null;
+            html5QrcodeScanner.resume();
+        });
+
+        // Send Another Button
+        document.getElementById('sendAnotherBtn').addEventListener('click', () => {
+            document.getElementById('successView').style.display = 'none';
+            document.getElementById('scannerView').style.display = 'flex';
+            document.getElementById('messageInput').value = '';
+            html5QrcodeScanner.resume();
+        });
+
+        // Retry Button
+        document.getElementById('retryBtn').addEventListener('click', () => {
+            document.getElementById('errorView').style.display = 'none';
+            document.getElementById('scannerView').style.display = 'flex';
+            document.getElementById('messageInput').value = '';
+            html5QrcodeScanner.resume();
+        });
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initScanner();
+        });
+    </script>
+</body>
+</html>

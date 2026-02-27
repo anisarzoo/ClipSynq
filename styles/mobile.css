@@ -1,0 +1,1011 @@
+/* ===========================
+   MOBILE RESPONSIVE STYLES
+   FIXED: Sidebar overflow issue
+=========================== */
+
+/* Tablet and smaller laptops */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 280px;
+    }
+
+    .sidebar-content {
+        padding: 20px;
+    }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+
+    /* Show mobile header */
+    .mobile-header {
+        display: flex;
+    }
+
+    /* Adjust body for mobile header */
+    body {
+        padding-top: 62px;
+    }
+
+    /* Sidebar - slide from left - FIXED OVERFLOW */
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 62px;
+        bottom: 0;
+        width: 280px;
+        z-index: 999;
+        transition: left 0.3s ease;
+        box-shadow: var(--shadow-xl);
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        /* CRITICAL FIX */
+    }
+
+    /* CRITICAL FIX: Make sidebar-content scrollable */
+    .sidebar-content {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 20px;
+        height: 100% !important;
+        max-height: calc(100vh - 62px) !important;
+        /* Account for mobile header */
+    }
+
+    /* Ensure mobile header stays on top */
+    .mobile-header {
+        z-index: 1000;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    /* Main content full width */
+    .main-content {
+        width: 100%;
+    }
+
+    /* Compact header */
+    .content-header {
+        padding: 10px 16px;
+        gap: 12px;
+        min-height: 50px;
+    }
+
+    .folder-breadcrumb h2 {
+        font-size: 16px;
+    }
+
+    .folder-breadcrumb i {
+        font-size: 16px;
+    }
+
+    /* Search takes full width */
+    .search-container {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        flex-basis: 100%;
+        margin-top: -4px;
+    }
+
+    .search-bar {
+        height: 34px;
+        padding: 5px 12px;
+    }
+
+    .search-bar input {
+        font-size: 12px;
+    }
+
+    /* Compact danger button */
+    .danger-btn {
+        padding: 7px 14px;
+        font-size: 12px;
+        height: 32px;
+    }
+
+    /* Messages container */
+    .messages-container {
+        padding: 16px;
+    }
+
+    .message-item {
+        padding: 16px;
+        margin-bottom: 14px;
+    }
+}
+
+/* Mobile Landscape */
+@media (max-width: 640px) {
+    .sidebar {
+        width: 260px;
+    }
+
+    .sidebar-content {
+        max-height: calc(100vh - 62px) !important;
+    }
+
+    .user-info {
+        padding: 16px;
+    }
+
+    .folders-section,
+    .devices-section {
+        margin-bottom: 20px;
+    }
+}
+
+/* Mobile Portrait - FIXED LAYOUT */
+@media (max-width: 480px) {
+
+    /* Mobile header more compact */
+    .mobile-header {
+        padding: 12px 16px;
+    }
+
+    .mobile-header h1 {
+        font-size: 18px;
+    }
+
+    body {
+        padding-top: 58px;
+    }
+
+    /* Sidebar adjustments - FIXED */
+    .sidebar {
+        width: 100%;
+        max-width: 320px;
+        top: 58px !important;
+        bottom: 0 !important;
+        height: auto !important;
+    }
+
+    .sidebar-content {
+        padding: 16px;
+        padding-bottom: 20px !important;
+        /* Extra bottom padding */
+        max-height: calc(100vh - 58px) !important;
+        /* Account for smaller header */
+    }
+
+    .user-info {
+        padding: 14px;
+        margin-bottom: 20px;
+    }
+
+    .user-device {
+        font-size: 15px;
+        margin-bottom: 14px;
+    }
+
+    /* ===========================
+       FIXED MOBILE HEADER LAYOUT
+    =========================== */
+    .content-header {
+        padding: 8px 12px;
+        gap: 8px;
+        min-height: auto;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        align-items: center;
+    }
+
+    /* Title - Row 1, spans full width */
+    .folder-breadcrumb {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        gap: 6px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+
+    .folder-breadcrumb i {
+        font-size: 14px;
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+
+    .folder-breadcrumb h2 {
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 30px);
+        color: var(--text);
+    }
+
+    /* Row 2: Search (left) + Clear button (right) - FIXED */
+    .search-container {
+        grid-column: 1;
+        grid-row: 2;
+        width: auto;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .search-bar {
+        height: 32px;
+        padding: 4px 10px;
+        border-radius: 16px;
+        width: 100%;
+    }
+
+    .search-icon {
+        font-size: 13px;
+        margin-right: 6px;
+    }
+
+    .search-bar input {
+        font-size: 13px;
+    }
+
+    .clear-search {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .clear-search i {
+        font-size: 12px;
+    }
+
+    /* Clear button - Row 2, right side, FULLY VISIBLE */
+    .danger-btn {
+        grid-column: 2;
+        grid-row: 2;
+        padding: 6px 10px;
+        font-size: 10px;
+        height: 32px;
+        min-width: 60px;
+        border-radius: 16px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        margin-left: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .danger-btn i {
+        font-size: 10px;
+        flex-shrink: 0;
+    }
+
+    .danger-btn span {
+        display: inline;
+        font-weight: 600;
+    }
+
+    /* Messages container - more compact */
+    .messages-container {
+        padding: 12px;
+    }
+
+    .message-item {
+        padding: 14px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        border-left-width: 3px;
+    }
+
+    .message-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .message-device {
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .message-device i {
+        font-size: 13px;
+    }
+
+    .message-time {
+        font-size: 11px;
+        gap: 4px;
+    }
+
+    .message-time i {
+        font-size: 11px;
+    }
+
+    .edited-badge {
+        font-size: 11px;
+        margin-left: 4px;
+    }
+
+    .message-content {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    .message-actions {
+        gap: 4px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    .action-btn {
+        padding: 5px 8px;
+        font-size: 10px;
+        border-radius: 6px;
+        gap: 3px;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .action-btn i {
+        font-size: 10px;
+        flex-shrink: 0;
+    }
+
+    /* Empty state */
+    .empty-state {
+        padding: 60px 20px;
+    }
+
+    .empty-state i {
+        font-size: 56px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state p {
+        font-size: 16px;
+    }
+
+    /* Folder items */
+    .folder-item {
+        padding: 10px 14px;
+        margin-bottom: 4px;
+        border-radius: 10px;
+    }
+
+    .folder-icon {
+        font-size: 16px;
+    }
+
+    .folder-name {
+        font-size: 14px;
+    }
+
+    .folder-count {
+        font-size: 12px;
+        padding: 3px 8px;
+        min-width: 24px;
+    }
+
+    /* Device items */
+    .device-item {
+        padding: 10px 14px;
+        margin-bottom: 6px;
+        border-radius: 10px;
+    }
+
+    .device-info i {
+        font-size: 18px;
+    }
+
+    .device-name {
+        font-size: 13px;
+    }
+
+    .device-status {
+        font-size: 11px;
+    }
+
+    .device-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    /* Section headers */
+    .section-header h3,
+    .devices-section h3 {
+        font-size: 12px;
+    }
+
+    .add-btn {
+        width: 26px;
+        height: 26px;
+    }
+
+    /* Modals */
+    .modal {
+        padding: 12px;
+    }
+
+    .modal-content {
+        padding: 24px 20px;
+        border-radius: 16px;
+        max-height: 85vh;
+    }
+
+    .modal-content h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+        padding-right: 35px;
+    }
+
+    .modal-subtitle {
+        font-size: 13px;
+        margin-bottom: 16px;
+    }
+
+    .close-modal {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+        top: 12px;
+        right: 12px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+        padding: 10px 14px;
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    #editTextarea {
+        min-height: 120px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-actions button,
+    .modal-actions .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* Delete modal */
+    .delete-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 16px;
+    }
+
+    .delete-icon i {
+        font-size: 32px;
+    }
+
+    .delete-modal-content h2 {
+        font-size: 18px;
+        padding-right: 0;
+    }
+
+    /* QR Modal */
+    .qr-modal-content {
+        max-width: 100%;
+    }
+
+    .qr-display {
+        padding: 16px;
+        min-height: 240px;
+    }
+
+    .qr-placeholder i {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+
+    .qr-placeholder p {
+        font-size: 13px;
+    }
+
+    .qr-display canvas,
+    .qr-display img {
+        max-width: 220px;
+    }
+
+    .qr-status {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .qr-instructions {
+        padding: 14px;
+        margin-top: 16px;
+    }
+
+    .qr-instructions h4 {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .qr-instructions li {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    /* Icon picker */
+    .icon-picker {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 8px 0;
+    }
+
+    .icon-option {
+        font-size: 20px;
+        border-radius: 10px;
+    }
+
+    /* Toast */
+    .toast {
+        bottom: 16px;
+        right: 12px;
+        left: 12px;
+        padding: 14px 16px;
+        max-width: none;
+        min-width: auto;
+        border-radius: 12px;
+    }
+
+    .toast i {
+        font-size: 18px;
+    }
+
+    .toast span {
+        font-size: 13px;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 360px) {
+    .mobile-header {
+        padding: 10px 12px;
+    }
+
+    .mobile-header h1 {
+        font-size: 16px;
+        gap: 8px;
+    }
+
+    .mobile-header h1 i {
+        font-size: 16px;
+    }
+
+    .icon-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    body {
+        padding-top: 54px;
+    }
+
+    .sidebar {
+        top: 54px !important;
+    }
+
+    .sidebar-content {
+        max-height: calc(100vh - 54px) !important;
+    }
+
+    .content-header {
+        padding: 6px 10px;
+    }
+
+    .folder-breadcrumb h2 {
+        font-size: 14px;
+        max-width: 150px;
+    }
+
+    .danger-btn {
+        padding: 5px 10px;
+        font-size: 11px;
+        height: 30px;
+    }
+
+    .messages-container {
+        padding: 10px;
+    }
+
+    .message-item {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    .message-content {
+        font-size: 13px;
+    }
+
+    .action-btn {
+        padding: 5px 8px;
+        font-size: 10px;
+    }
+}
+
+/* ===========================
+   COMPACT PROFESSIONAL INPUT
+=========================== */
+.input-container {
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+}
+
+#messageInput {
+    flex: 1;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    resize: none;
+    outline: none;
+    background: #f8fafc;
+    color: #1e293b;
+    height: 38px;
+    min-height: 38px;
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    line-height: 1.4;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+#messageInput:focus {
+    border-color: #0ea5e9;
+    background: white;
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.1);
+}
+
+#messageInput::placeholder {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* Enhanced scrollbar styling for mobile - matches design */
+#messageInput {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(14, 165, 233, 0.4) transparent;
+}
+
+#messageInput::-webkit-scrollbar {
+    width: 6px;
+    display: block;
+}
+
+#messageInput::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 2px 0;
+}
+
+#messageInput::-webkit-scrollbar-thumb {
+    background: rgba(14, 165, 233, 0.4);
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+}
+
+#messageInput::-webkit-scrollbar-thumb:hover {
+    background: rgba(14, 165, 233, 0.6);
+    background-clip: padding-box;
+}
+
+/* Global scrollbar styling for messages list */
+#messagesList {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+#messagesList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#messagesList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#messagesList::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 3px;
+}
+
+#messagesList::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5);
+}
+
+.input-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.icon-btn-large {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.icon-btn-large:hover,
+.icon-btn-large:active {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.icon-btn-large i {
+    font-size: 18px;
+}
+
+.send-btn {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    border: none;
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(14, 165, 233, 0.25);
+}
+
+.send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 8px rgba(14, 165, 233, 0.35);
+}
+
+.send-btn:active {
+    transform: scale(0.98);
+}
+
+.send-btn i {
+    font-size: 16px;
+    margin-left: 1px;
+}
+
+/* Mobile input optimizations */
+@media (max-width: 480px) {
+    .input-container {
+        padding: 6px 10px;
+    }
+
+    #messageInput {
+        font-size: 16px;
+        /* Prevent iOS zoom */
+        padding: 7px 12px;
+        height: 36px;
+        min-height: 36px;
+        max-height: 90px;
+        border-radius: 18px;
+    }
+
+    #messageInput::placeholder {
+        font-size: 14px;
+    }
+
+    .icon-btn-large,
+    .send-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .icon-btn-large i {
+        font-size: 16px;
+    }
+
+    .send-btn i {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .input-container {
+        padding: 6px 8px;
+    }
+
+    #messageInput {
+        height: 34px;
+        min-height: 34px;
+        padding: 6px 12px;
+        border-radius: 17px;
+    }
+
+    .icon-btn-large,
+    .send-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .icon-btn-large i,
+    .send-btn i {
+        font-size: 14px;
+    }
+}
+
+/* Landscape orientation - give more vertical space */
+@media (max-height: 600px) and (orientation: landscape) {
+    .user-info {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .user-device {
+        margin-bottom: 10px;
+    }
+
+    .folders-section,
+    .devices-section {
+        margin-bottom: 16px;
+    }
+
+    .messages-container {
+        padding: 12px;
+    }
+
+    .message-item {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+    }
+
+    .modal-content {
+        max-height: 80vh;
+        padding: 20px;
+    }
+
+    .input-container {
+        padding: 6px 10px;
+    }
+
+    #messageInput {
+        max-height: 70px;
+        min-height: 36px;
+    }
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    #messageInput {
+        font-size: 16px !important;
+    }
+}
+
+/* Prevent textarea from expanding the viewport */
+#messageInput {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Reduce animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .sidebar {
+        transition: none;
+    }
+
+    .message-item:hover {
+        transform: none;
+    }
+}
+
+/* Android-specific input visibility fixes */
+@media (max-width: 768px) {
+
+    /* Ensure input container is above all elements */
+    .input-container {
+        z-index: 100 !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        box-sizing: border-box;
+        top: auto;
+    }
+
+    /* Ensure main content doesn't overlap input */
+    .main-content {
+        padding-bottom: 60px;
+    }
+
+    /* Ensure textarea is fully visible */
+    #messageInput {
+        visibility: visible !important;
+        opacity: 1 !important;
+        display: block !important;
+        position: relative;
+        z-index: 101;
+    }
+
+    #messageInput:focus {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Print styles */
+@media print {
+
+    .mobile-header,
+    .sidebar,
+    .input-container,
+    .message-actions {
+        display: none !important;
+    }
+
+    body {
+        padding-top: 0;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .content-header {
+        border-bottom: 2px solid #000;
+    }
+
+    .message-item {
+        page-break-inside: avoid;
+        border: 1px solid #000;
+    }
+}

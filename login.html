@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ClipSynq</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="app.png">
+    
+    <!-- Meta Tags -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="description" content="Login to ClipSynq - Sync messages across devices">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="styles/mobile.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <!-- Header Bar -->
+        <div class="login-header-bar">
+            <div class="header-logo">
+                <i class="fas fa-comments"></i>
+                <span>ClipSynq</span>
+            </div>
+            <button id="installAppBtn" class="install-btn" style="display: none;">
+                <i class="fas fa-download"></i>
+                Install App
+            </button>
+        </div>
+
+
+        <!-- Main Login Box -->
+        <div class="login-box">
+            <!-- Left Side - Branding (Desktop Only) -->
+            <div class="login-left">
+                <div class="login-branding">
+                    <div class="brand-logo">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h2>ClipSynq</h2>
+                    <p>Sync messages across all your devices instantly</p>
+                    <ul class="features-list">
+                        <li><i class="fas fa-check"></i> Real-time sync</li>
+                        <li><i class="fas fa-check"></i> Multi-device support</li>
+                        <li><i class="fas fa-check"></i> Secure & private</li>
+                        <li><i class="fas fa-check"></i> Works offline</li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- Right Side - Login Form -->
+            <div class="login-right">
+                <!-- Error Message -->
+                <div id="errorMsg" class="error-msg" style="display: none;"></div>
+
+
+                <!-- Tabs -->
+                <div class="login-tabs">
+                    <button class="tab-btn active" data-tab="login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                    <button class="tab-btn" data-tab="qr">
+                        <i class="fas fa-qrcode"></i>
+                        QR Code
+                    </button>
+                </div>
+
+
+                <!-- Login Tab Content -->
+                <div class="tab-content active" id="loginTab">
+                    <h3 class="form-title">Welcome back</h3>
+                    
+                    <!-- Google Login -->
+                    <button id="googleLoginBtn" class="google-btn">
+                        <svg width="18" height="18" viewBox="0 0 18 18">
+                            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                            <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
+                            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+
+
+                    <div class="divider">OR</div>
+
+
+                    <!-- Email Input -->
+                    <div class="form-group">
+                        <input type="email" 
+                               id="emailInput" 
+                               class="form-input"
+                               placeholder="Enter your email"
+                               autocomplete="email">
+                    </div>
+
+
+                    <!-- Password Input -->
+                    <div class="form-group">
+                        <div class="password-wrapper">
+                            <input type="password" 
+                                   id="passwordInput" 
+                                   class="form-input"
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password">
+                            <button type="button" class="toggle-password-btn" id="togglePasswordBtn" title="Show/hide password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <!-- Password Strength Indicator -->
+                        <div class="password-strength-wrapper">
+                            <div class="password-strength-bar">
+                                <div class="password-strength-fill" id="passwordStrengthFill"></div>
+                            </div>
+                            <div class="password-strength-text" id="passwordStrengthText">Weak</div>
+                        </div>
+                    </div>
+
+
+                    <!-- Remember & Forgot Password -->
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                        <button type="button" class="forgot-link-btn" id="forgotPasswordBtn">Forgot password?</button>
+                    </div>
+
+
+                    <!-- Button Group -->
+                    <div class="button-group">
+                        <button id="loginBtn" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login</span>
+                        </button>
+                    </div>
+
+
+                    <div class="signup-link">
+                        Don't have an account? 
+                        <button id="signupBtn" class="link-btn">
+                            Create one
+                        </button>
+                    </div>
+                </div>
+
+
+                <!-- QR Code Tab Content -->
+                <div class="tab-content" id="qrTab">
+                    <h3 class="form-title">Scan QR Code</h3>
+                    <p style="color: #64748b; font-size: 14px; margin-bottom: 24px; text-align: center;">
+                        Scan the QR code from your desktop to login instantly
+                    </p>
+                    
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <div style="margin-bottom: 24px;">
+                            <i class="fas fa-qrcode" style="font-size: 64px; color: #0ea5e9;"></i>
+                        </div>
+                        <p style="color: #475569; margin-bottom: 24px;">
+                            Click below to open the QR scanner
+                        </p>
+                        <button id="openScannerBtn" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px;">
+                            <i class="fas fa-camera"></i>
+                            <span style="margin-left: 8px;">Open QR Scanner</span>
+                        </button>
+                        <p style="color: #94a3b8; font-size: 13px; margin-top: 16px;">
+                            <i class="fas fa-info-circle"></i>
+                            Make sure to login on desktop first
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Download App Modal -->
+    <div class="modal" id="downloadModal">
+        <div class="modal-content download-modal-content">
+            <button class="modal-close" id="downloadClose">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <h2>
+                <i class="fas fa-download"></i>
+                Download ClipSynq
+            </h2>
+            <p class="modal-subtitle">Get the app for the best experience</p>
+            
+            <div class="download-options">
+                <a href="#" class="download-link" id="appStoreLink">
+                    <i class="fab fa-apple"></i>
+                    <div>
+                        <div class="download-label">App Store</div>
+                        <div class="download-desc">iOS</div>
+                    </div>
+                </a>
+                
+                <a href="#" class="download-link" id="playStoreLink">
+                    <i class="fab fa-google-play"></i>
+                    <div>
+                        <div class="download-label">Play Store</div>
+                        <div class="download-desc">Android</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="divider">OR</div>
+            
+            <button class="download-link pwa-link" id="installPWA">
+                <i class="fas fa-globe"></i>
+                <div>
+                    <div class="download-label">Install PWA</div>
+                    <div class="download-desc">Web App</div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Device Name Modal -->
+    <div class="modal" id="deviceModal">
+        <div class="modal-content device-modal-content">
+            <h2>
+                <i class="fas fa-laptop"></i>
+                Name This Device
+            </h2>
+            <p class="modal-subtitle">Choose a name to identify this device</p>
+            
+            <div class="form-group">
+                <label for="modalDeviceInput">
+                    <i class="fas fa-tag"></i>
+                    Device Name
+                </label>
+                <input type="text" 
+                       id="modalDeviceInput" 
+                       placeholder="e.g., My Laptop, Office PC..."
+                       maxlength="30"
+                       autocomplete="off">
+            </div>
+            
+            <button class="btn btn-primary btn-block" id="modalConfirmBtn">
+                <i class="fas fa-check"></i>
+                Continue
+            </button>
+            
+            <p class="device-hint">
+                <i class="fas fa-info-circle"></i>
+                You can change this later in settings
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Firebase -->
+    <script type="module" src="js/firebase-config.js"></script>
+    
+    <!-- Auth Script -->
+    <script type="module" src="js/auth.js"></script>
+
+
+    <!-- QR Scanner Redirect -->
+    <script>
+        // Redirect to QR scanner page
+        document.getElementById('openScannerBtn')?.addEventListener('click', () => {
+            window.location.href = 'qr-scanner.html';
+        });
+    </script>
+
+
+    <!-- PWA Install Handler & Download Modal -->
+    <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('installAppBtn');
+        const downloadModal = document.getElementById('downloadModal');
+        const downloadClose = document.getElementById('downloadClose');
+        const installPWA = document.getElementById('installPWA');
+
+
+        // PWA Installation
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'flex';
+        });
+
+
+        installBtn?.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA installed');
+        });
+
+
+        // Download Modal Functions
+        function showDownloadModal() {
+            downloadModal?.classList.add('active');
+            downloadModal.style.display = 'flex';
+        }
+
+
+        function closeDownloadModal() {
+            downloadModal?.classList.remove('active');
+            downloadModal.style.display = 'none';
+        }
+
+
+        // Close modal on X button
+        downloadClose?.addEventListener('click', closeDownloadModal);
+
+
+        // Close modal on overlay click
+        downloadModal?.addEventListener('click', (e) => {
+            if (e.target === downloadModal) {
+                closeDownloadModal();
+            }
+        });
+
+
+        // PWA install from download modal
+        installPWA?.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    closeDownloadModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

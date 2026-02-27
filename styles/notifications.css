@@ -1,0 +1,345 @@
+/* ===========================
+   NOTIFICATION SYSTEM - FLOATING POPUP v3.4
+   =========================== */
+
+/* ============================================
+   NOTIFICATION BELL BUTTON (IN GLOBAL SHARE HEADER)
+   ============================================ */
+.notification-icon-btn {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.notification-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+}
+
+/* ============================================
+   NOTIFICATION PANEL - FLOATING POPUP
+   ============================================ */
+.notification-panel {
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    max-height: 500px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    z-index: 10002;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.notification-panel:not(.hidden) {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.notification-header {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    padding: 16px 20px;
+    border-radius: 16px 16px 0 0;
+}
+
+.notification-header h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notification-header h3 i {
+    font-size: 18px;
+    color: white;
+}
+
+/* ============================================
+   FILTER TABS
+   ============================================ */
+.notification-filter-tabs {
+    display: flex;
+    gap: 6px;
+}
+
+.notif-tab {
+    flex: 1;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.notif-tab:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.notif-tab.active {
+    background: white;
+    color: #0ea5e9;
+    font-weight: 600;
+}
+
+/* ============================================
+   NOTIFICATION LIST
+   ============================================ */
+.notification-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    max-height: 400px;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.notification-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.notification-empty i {
+    font-size: 48px;
+    color: #e5e7eb;
+    margin-bottom: 16px;
+}
+
+.notification-empty p {
+    margin: 0 0 6px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.notification-empty span {
+    font-size: 13px;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+/* ============================================
+   NOTIFICATION ITEMS
+   ============================================ */
+.notification-item {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.notification-item:hover {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    transform: translateX(-2px);
+}
+
+.notification-item.unread {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-left: 3px solid #0ea5e9;
+}
+
+.notification-item.read {
+    opacity: 0.7;
+}
+
+.notification-item:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   NOTIFICATION ICON
+   ============================================ */
+.notification-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    color: white;
+    font-size: 16px;
+}
+
+.notification-icon i.fa-heart {
+    color: #ef4444;
+}
+
+.notification-icon i.fa-reply {
+    color: #3b82f6;
+}
+
+/* ============================================
+   NOTIFICATION CONTENT
+   ============================================ */
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-message {
+    margin: 0 0 4px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1f2937;
+    line-height: 1.4;
+}
+
+.notification-message strong {
+    color: #0ea5e9;
+    font-weight: 600;
+}
+
+.notification-preview {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* Standard + vendor-prefixed multi-line clamp */
+    display: -webkit-box;
+    line-clamp: 2;           /* Standard property */
+    -webkit-line-clamp: 2;   /* WebKit fallback */
+    -webkit-box-orient: vertical;
+}
+
+.notification-time {
+    font-size: 11px;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+/* ============================================
+   DELETE BUTTON
+   ============================================ */
+.notification-delete {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.notification-delete:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+.notification-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 3px;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .notification-panel {
+        right: 8px;
+        left: 8px;
+        width: auto;
+        max-width: none;
+    }
+
+    .notification-header {
+        padding: 14px 16px;
+    }
+
+    .notification-list {
+        padding: 10px;
+        max-height: 350px;
+    }
+}
+
+/* ============================================
+   HIDDEN STATE
+   ============================================ */
+.hidden {
+    display: flex !important; /* Override to allow transition */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px) scale(0.95);
+}

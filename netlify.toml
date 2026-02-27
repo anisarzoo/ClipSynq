@@ -1,0 +1,29 @@
+[build]
+publish = "."
+command = "echo 'Deploying ClipSynq...'"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+[[redirects]]
+from = "/login"
+to = "/login.html"
+status = 200
+
+[context.production]
+environment = { NODE_ENV = "production" }
+
+[headers]
+[[headers.values]]
+key = "Cache-Control"
+value = "public, max-age=3600"
+
+[[headers.values]]
+key = "X-Content-Type-Options"
+value = "nosniff"
+
+[[headers.values]]
+key = "X-Frame-Options"
+value = "SAMEORIGIN"

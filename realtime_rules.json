@@ -1,0 +1,114 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "displayName": {
+          ".validate": "newData.isString() && newData.val().length <= 100"
+        },
+        "photoURL": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "folders": {
+          "$folderId": {
+            ".validate": "newData.hasChildren(['name','icon'])",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 30"
+            },
+            "icon": {
+              ".validate": "newData.isString() && newData.val().length <= 30"
+            },
+            "messages": {
+              "$messageId": {
+                ".validate": "newData.hasChildren(['text','timestamp']) || newData.hasChildren(['starred']) || newData.hasChildren(['pinned'])",
+                "text": {
+                  ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 5000"
+                },
+                "timestamp": {
+                  ".validate": "newData.isNumber()"
+                },
+                "starred": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "pinned": {
+                  ".validate": "newData.isBoolean()"
+                },
+                "deviceId": {
+                  ".validate": "newData.isString()"
+                }
+              }
+            }
+          }
+        },
+        "devices": {
+          "$deviceId": {
+            ".validate": "newData.hasChildren(['name','type'])",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 50"
+            },
+            "type": {
+              ".validate": "newData.val() === 'desktop' || newData.val() === 'mobile' || newData.val() === 'tablet'"
+            },
+            "lastSeen": {
+              ".validate": "newData.isNumber()"
+            },
+            "isOnline": {
+              ".validate": "newData.isBoolean()"
+            },
+            "forceLogout": {
+              ".validate": "newData.isBoolean()"
+            },
+            "lastActive": {
+              ".validate": "newData.isNumber()"
+            },
+            "userAgent": {
+              ".validate": "newData.isString()"
+            },
+            "addedAt": {
+              ".validate": "newData.isNumber()"
+            }
+          }
+        }
+      }
+    },
+    "qr-devices": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "qr-sessions": {
+      "$sessionId": {
+        ".read": true,
+        ".write": "(!data.exists() && newData.exists() && newData.child('createdAt').isNumber() && newData.child('expiresAt').isNumber() && newData.child('status').val() === 'pending') || (data.exists() && data.child('status').val() === 'pending' && newData.child('status').val() === 'approved' && auth != null && newData.child('userId').val() === auth.uid && now < data.child('expiresAt').val())",
+        ".validate": "newData.child('createdAt').isNumber() && newData.child('expiresAt').isNumber() && (newData.child('userId').isString() || !newData.child('userId').exists() || newData.child('userId').val() === null) && (newData.child('status').val() === 'pending' || newData.child('status').val() === 'approved' || newData.child('status').val() === 'rejected')"
+      }
+    },
+    "globalMessages": {
+      ".read": true,
+      ".write": false,
+      ".indexOn": [
+        "timestamp"
+      ],
+      "$msgId": {
+        ".read": true,
+        ".write": "(auth != null && auth.uid === data.child('uid').val()) || (data.exists() && newData.exists() && data.child('clientId').val() === newData.child('clientId').val()) || (!data.exists() && newData.exists())",
+        ".validate": "newData.hasChildren(['content','timestamp','name']) && newData.child('content').isString() && newData.child('content').val().length > 0 && newData.child('content').val().length <= 1000 && newData.child('timestamp').isNumber() && newData.child('name').isString() && (newData.child('uid').isString() || newData.child('clientId').isString())"
+      }
+    },
+    "notifications": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null",
+        "$notifId": {
+          ".validate": "newData.hasChildren(['type', 'timestamp', 'read'])"
+        }
+      }
+    },
+    "appConfig": {
+      ".read": true,
+      ".write": false
+    }
+  }
+}

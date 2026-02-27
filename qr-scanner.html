@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code - ClipSynq</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .scanner-container {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        #reader {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #1e293b;
+        }
+
+        .status {
+            padding: 16px;
+            background: #f0f9ff;
+            border-radius: 12px;
+            color: #0c4a6e;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+            margin-bottom: 16px;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            background: #d1fae5;
+            color: #064e3b;
+        }
+
+        .status.error {
+            background: #fee2e2;
+            color: #7f1d1d;
+        }
+
+        .status i {
+            margin-right: 8px;
+        }
+
+        .back-btn {
+            margin-top: 12px;
+            padding: 12px 24px;
+            background: transparent;
+            border: 2px solid #0ea5e9;
+            color: #0ea5e9;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #0ea5e9;
+            color: white;
+        }
+
+        #reader__scan_region {
+            border: 3px solid #0ea5e9 !important;
+        }
+
+        #reader__dashboard_section {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanner-container">
+        <h1><i class="fas fa-qrcode"></i> Scan to Login</h1>
+        <p class="subtitle">Point your camera at the QR code on your computer</p>
+        
+        <div id="reader"></div>
+        
+        <div class="status" id="status">
+            <i class="fas fa-spinner fa-spin"></i> Initializing camera...
+        </div>
+        
+        <a href="login.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </a>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, get, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB26bXGxj5TGfHIXjFijp1TmPfaJzMLEtE",
+            authDomain: "swapchat001.firebaseapp.com",
+            databaseURL: "https://swapchat001-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "swapchat001",
+            storageBucket: "swapchat001.firebasestorage.app",
+            messagingSenderId: "61862567020",
+            appId: "1:61862567020:web:0d7d15d74b67fda23e0c49"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const statusDiv = document.getElementById('status');
+        
+        let isScanning = true;
+        let html5QrCode = null;
+
+        function showStatus(message, type = 'info') {
+            statusDiv.innerHTML = message;
+            statusDiv.className = `status show ${type}`;
+        }
+
+        startScanner();
+
+        async function startScanner() {
+            try {
+                showStatus('<i class="fas fa-spinner fa-spin"></i> Starting camera...', 'info');
+
+                html5QrCode = new Html5Qrcode("reader");
+
+                const config = {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                };
+
+                await html5QrCode.start(
+                    { facingMode: "environment" },
+                    config,
+                    onScanSuccess,
+                    onScanFailure
+                );
+
+                showStatus('<i class="fas fa-camera"></i> Ready to scan', 'info');
+
+            } catch (err) {
+                console.error('Scanner error:', err);
+                let errorMsg = 'Camera error: ' + err.message;
+                
+                if (err.toString().includes('NotAllowedError')) {
+                    errorMsg = 'Camera permission denied. Please allow camera access.';
+                } else if (err.toString().includes('NotFoundError')) {
+                    errorMsg = 'No camera found on this device.';
+                }
+                
+                showStatus('<i class="fas fa-exclamation-circle"></i> ' + errorMsg, 'error');
+            }
+        }
+
+        async function onScanSuccess(decodedText) {
+            if (!isScanning) return;
+
+            try {
+                isScanning = false;
+                console.log('QR scanned:', decodedText);
+                showStatus('<i class="fas fa-check-circle"></i> QR detected!', 'info');
+
+                const qrData = JSON.parse(decodedText);
+
+                if (qrData.type !== 'ClipSynq-login') {
+                    throw new Error('Invalid QR code');
+                }
+
+                const sessionId = qrData.sessionId;
+                const userId = qrData.userId;
+
+                if (!userId) {
+                    throw new Error('Invalid QR data');
+                }
+
+                const sessionRef = ref(database, `qr-sessions/${sessionId}`);
+                const snapshot = await get(sessionRef);
+
+                if (!snapshot.exists()) {
+                    throw new Error('Session not found');
+                }
+
+                const sessionData = snapshot.val();
+
+                if (Date.now() > sessionData.expiresAt) {
+                    throw new Error('QR code expired');
+                }
+
+                if (sessionData.status !== 'pending') {
+                    throw new Error('QR already used');
+                }
+
+                showStatus('<i class="fas fa-key"></i> Linking account...', 'info');
+
+                // Update session
+                await update(sessionRef, {
+                    status: 'scanned',
+                    scannedAt: Date.now()
+                });
+
+                // STORE USER ID PERMANENTLY IN LOCALSTORAGE
+                localStorage.setItem('linkedUserId', userId);
+                localStorage.setItem('linkedUserEmail', sessionData.userEmail || '');
+                localStorage.setItem('loginMethod', 'qr');
+
+                await update(sessionRef, {
+                    status: 'authenticated',
+                    authenticatedAt: Date.now()
+                });
+
+                showStatus('<i class="fas fa-check-circle"></i> ✓ Success! Account linked. Redirecting...', 'success');
+
+                if (html5QrCode) {
+                    await html5QrCode.stop();
+                }
+
+                // Redirect to main app
+                setTimeout(() => window.location.href = 'index.html', 1500);
+
+            } catch (error) {
+                console.error('Scan error:', error);
+                showStatus('<i class="fas fa-exclamation-circle"></i> ' + error.message, 'error');
+                setTimeout(() => isScanning = true, 2000);
+            }
+        }
+
+        function onScanFailure(error) {
+            // Ignore
+        }
+    </script>
+</body>
+</html>

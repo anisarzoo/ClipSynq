@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipSynq - Sync Messages Across Devices</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="app.png">
+
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0ea5e9">
+  <meta name="description" content="Sync messages across all your devices instantly">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="app.png">
+
+  <!-- Guard against browser extensions -->
+  <script>
+    window.addEventListener(
+      'error',
+      (e) => {
+        if (
+          e.filename &&
+          (e.filename.includes('extension') ||
+            e.filename.includes('chrome-extension') ||
+            e.filename.includes('contentScript'))
+        ) {
+          e.preventDefault();
+          return false;
+        }
+        if (e.message && e.message.includes('ethereum')) {
+          e.preventDefault();
+          return false;
+        }
+      },
+      true
+    );
+  </script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/app.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/global.css">
+  <link rel="stylesheet" href="styles/mobile.css">
+  <link rel="stylesheet" href="styles/notifications.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <button class="hamburger" id="menuToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <h1><i class="fas fa-comments"></i> ClipSynq</h1>
+    <div class="mobile-actions">
+      <button class="icon-btn" id="mobileLogoutBtn" title="Logout" aria-label="Logout">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-content">
+      <!-- User Info -->
+      <div class="user-info">
+        <div class="user-device">
+          <i class="fas fa-laptop"></i>
+          <!-- Profile / account name -->
+          <span class="userName">You</span>
+        </div>
+        <div class="user-actions">
+          <!-- Global Share → QR Code → Logout -->
+          <button class="qr-btn-sidebar" id="globalBtn" onclick="openGlobalModal()">
+            <i class="fas fa-share-alt"></i> Global Share
+          </button>
+          <button class="qr-btn-sidebar" id="sidebarQRBtn">
+            <i class="fas fa-qrcode"></i> Show QR Code
+          </button>
+          <button class="logout-btn-sidebar" id="sidebarLogoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Folders Section -->
+      <div class="folders-section">
+        <div class="section-header">
+          <h3><i class="fas fa-folder"></i> Folders</h3>
+          <div class="section-actions">
+            <button class="section-toggle" id="toggleFolders" title="Collapse folders" aria-label="Collapse folders">
+              <i class="fas fa-chevron-up"></i>
+            </button>
+            <button class="add-btn" id="addFolderBtn" title="Add folder" aria-label="Add folder">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div id="foldersList" class="collapsible-section"></div>
+      </div>
+
+      <!-- Devices Section -->
+      <div class="devices-section">
+        <div class="section-header">
+          <h3><i class="fas fa-desktop"></i> My Devices</h3>
+          <button class="section-toggle" id="toggleDevices" title="Collapse devices" aria-label="Collapse devices">
+            <i class="fas fa-chevron-up"></i>
+          </button>
+        </div>
+        <div id="devicesList" class="collapsible-section"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Content Header -->
+    <header class="content-header">
+      <div class="folder-breadcrumb">
+        <i class="fas fa-inbox" id="folderIcon"></i>
+        <h2 id="folderTitle">All Messages</h2>
+      </div>
+      <div class="search-container">
+        <div class="search-bar">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search messages..." autocomplete="off">
+          <button class="clear-search" id="clearSearch" aria-label="Clear search">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <button class="danger-btn" id="clearAllBtn" title="Clear all messages">
+        <i class="fas fa-trash-alt"></i> Clear All
+      </button>
+    </header>
+
+    <!-- Pinned Messages Bar -->
+    <div class="pinned-messages-bar" id="pinnedMessagesBar" style="display: none;">
+      <div id="pinnedBadgesList" class="pinned-badges-list"></div>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="messages-container" id="messagesList">
+      <div class="empty-state">
+        <i class="fas fa-comments"></i>
+        <p>No messages yet</p>
+        <p>Start by sending your first message</p>
+      </div>
+    </div>
+
+    <!-- Input Container -->
+    <div class="input-container" title="Ctrl+Enter to send, Shift+Enter for new line">
+      <textarea id="messageInput" placeholder="Type a message..." rows="1" wrap="soft" spellcheck="true"></textarea>
+      <div class="input-actions">
+        <button id="pasteBtn" class="icon-btn-large" title="Paste from clipboard" aria-label="Paste">
+          <i class="fas fa-clipboard"></i>
+        </button>
+        <button id="sendBtn" class="send-btn" title="Send message (Ctrl+Enter)" aria-label="Send">
+          <i class="fas fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Folder Modal -->
+  <div class="modal" id="folderModal">
+    <div class="modal-content">
+      <button class="close-modal" id="closeFolderModal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <h2><i class="fas fa-folder-plus"></i> Create Folder</h2>
+      <p class="modal-subtitle">Organize your messages into folders</p>
+
+      <div class="form-group">
+        <label for="folderNameInput">
+          <i class="fas fa-tag"></i> Folder Name
+        </label>
+        <input type="text" id="folderNameInput" placeholder="e.g., Work, Personal, Ideas..." maxlength="30"
+          autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-icons"></i> Choose Icon</label>
+        <div class="icon-picker" id="iconPicker">
+          <button class="icon-option active" data-icon="folder">
+            <i class="fas fa-folder"></i>
+          </button>
+          <button class="icon-option" data-icon="briefcase">
+            <i class="fas fa-briefcase"></i>
+          </button>
+          <button class="icon-option" data-icon="home">
+            <i class="fas fa-home"></i>
+          </button>
+          <button class="icon-option" data-icon="heart">
+            <i class="fas fa-heart"></i>
+          </button>
+          <button class="icon-option" data-icon="star">
+            <i class="fas fa-star"></i>
+          </button>
+          <button class="icon-option" data-icon="bookmark">
+            <i class="fas fa-bookmark"></i>
+          </button>
+          <button class="icon-option" data-icon="lightbulb">
+            <i class="fas fa-lightbulb"></i>
+          </button>
+          <button class="icon-option" data-icon="code">
+            <i class="fas fa-code"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelFolderBtn">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="btn btn-primary" id="createFolderBtn">
+          <i class="fas fa-check"></i> Create
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Message Modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <button class="close-modal" id="closeEditModal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <h2><i class="fas fa-edit"></i> Edit Message</h2>
+      <p class="modal-subtitle">Update your message content</p>
+
+      <div class="form-group">
+        <label for="editTextarea">
+          <i class="fas fa-align-left"></i> Message Content
+        </label>
+        <textarea id="editTextarea" rows="8" placeholder="Enter your message..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelEditBtn">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="btn btn-primary" id="saveEditBtn">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" id="deleteModal">
+    <div class="modal-content delete-modal-content">
+      <div class="delete-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h2>Delete Message?</h2>
+      <p class="modal-subtitle">This action cannot be undone.</p>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelDeleteBtn">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clear All Confirmation Modal -->
+  <div class="modal" id="clearAllModal">
+    <div class="modal-content delete-modal-content">
+      <div class="delete-icon warning">
+        <i class="fas fa-trash-alt"></i>
+      </div>
+      <h2 id="clearAllTitle">Clear All Messages?</h2>
+      <p class="modal-subtitle" id="clearAllSubtitle">
+        This will permanently delete all messages. This action cannot be undone.
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelClearAllBtn">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="btn btn-danger" id="confirmClearAllBtn">
+          <i class="fas fa-trash-alt"></i> Clear All
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rename Device Modal -->
+  <div class="modal" id="renameDeviceModal">
+    <div class="modal-content">
+      <button class="close-modal" id="closeRenameDeviceModal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <h2><i class="fas fa-pen"></i> Rename Device</h2>
+      <p class="modal-subtitle">Change the name of this device</p>
+
+      <div class="form-group">
+        <input type="text" id="renameDeviceInput" placeholder="Enter new device name..." maxlength="50"
+          autocomplete="off" aria-label="Device name">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelRenameBtn">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="btn btn-primary" id="confirmRenameBtn">
+          <i class="fas fa-check"></i> Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div class="modal" id="qrModal">
+    <div class="modal-content qr-modal-premium">
+      <button class="close-modal-premium" id="closeQRModal" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <button class="qr-info-btn-top" id="qrHelpBtn" title="How to use">
+        <i class="fas fa-question"></i>
+      </button>
+
+      <div class="qr-modal-header">
+        <div class="qr-icon-badge">
+          <i class="fas fa-qrcode"></i>
+        </div>
+        <h2>Scan to Login</h2>
+        <p class="qr-subtitle">Use ClipSynq on your mobile to scan</p>
+      </div>
+
+      <div class="qr-code-wrapper">
+        <div class="qr-code-frame">
+          <div class="qr-display-premium" id="qrDisplay">
+            <div class="qr-placeholder-premium">
+              <div class="qr-loader">
+                <div class="loader-ring"></div>
+                <div class="loader-ring"></div>
+                <div class="loader-ring"></div>
+              </div>
+              <p>Generating...</p>
+            </div>
+          </div>
+          <div class="qr-corner qr-corner-tl"></div>
+          <div class="qr-corner qr-corner-tr"></div>
+          <div class="qr-corner qr-corner-bl"></div>
+          <div class="qr-corner qr-corner-br"></div>
+        </div>
+      </div>
+
+      <div class="qr-status-premium" id="qrStatus">
+        <div class="status-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <p>Point your camera at the QR code</p>
+      </div>
+
+      <div class="qr-tooltip-popup" id="qrInstructions" style="display: none;">
+        <div class="tooltip-arrow"></div>
+        <h4><i class="fas fa-mobile-alt"></i> Quick Guide</h4>
+        <ol>
+          <li><strong>Open ClipSynq</strong> on your mobile</li>
+          <li>
+            <strong>Go to login page</strong> and tap "QR Code" tab
+          </li>
+          <li><strong>Click "Open QR Scanner"</strong> button</li>
+          <li><strong>Scan this code</strong> to link device</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL SHARE MODAL -->
+  <div id="globalModal" class="modal global-modal">
+    <div class="global-modal-content">
+      <!-- Header with notification bell -->
+      <div class="global-modal-header">
+        <h2>🌍 Global Share</h2>
+        <div class="global-header-actions">
+          <span id="globalMessageCount">0</span>
+
+          <!-- Notification bell -->
+          <button id="globalNotificationBtn" class="notification-icon-btn" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span id="globalNotificationBadge" class="notification-badge" style="display: none;">0</span>
+          </button>
+
+          <!-- Refresh button -->
+          <button id="refreshGlobalBtn" title="Refresh">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+
+          <!-- Close button -->
+          <button id="closeGlobalModal" title="Close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Category filters -->
+      <div class="global-category-filters">
+        <button class="category-chip active" data-category="all">
+          <i class="fas fa-globe"></i> All
+        </button>
+        <button class="category-chip" data-category="general">
+          💬 General
+        </button>
+        <button class="category-chip" data-category="gaming">
+          🎮 Gaming
+        </button>
+        <button class="category-chip" data-category="movies">
+          🎬 Movies
+        </button>
+        <button class="category-chip" data-category="music">
+          🎵 Music
+        </button>
+        <button class="category-chip" data-category="books">
+          📚 Books
+        </button>
+        <button class="category-chip" data-category="tech">
+          💻 Tech
+        </button>
+        <button class="category-chip" data-category="health">
+          💪 Health
+        </button>
+        <button class="category-chip" data-category="food">
+          🍕 Food
+        </button>
+        <button class="category-chip" data-category="travel">
+          ✈️ Travel
+        </button>
+        <button class="category-chip" data-category="sports">
+          ⚽ Sports
+        </button>
+        <button class="category-chip" data-category="art">
+          🎨 Art
+        </button>
+        <button class="category-chip" data-category="learning">
+          🧠 Learning
+        </button>
+        <button class="category-chip" data-category="news">
+          📰 News
+        </button>
+        <button class="category-chip" data-category="memes">
+          😂 Memes
+        </button>
+      </div>
+
+      <!-- Messages feed -->
+      <div class="global-messages" id="globalMessagesList">
+        <div class="global-loading">
+          <i class="fas fa-circle-notch fa-spin"></i>
+          <p>Loading...</p>
+        </div>
+      </div>
+
+      <!-- Input panel -->
+      <div class="global-input-panel">
+        <button id="cancelReplyBtn" style="display: none;" title="Cancel reply">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <select id="globalCategorySelect">
+          <option value="general">💬 General</option>
+          <option value="gaming">🎮 Gaming</option>
+          <option value="movies">🎬 Movies</option>
+          <option value="music">🎵 Music</option>
+          <option value="books">📚 Books</option>
+          <option value="tech">💻 Tech</option>
+          <option value="health">💪 Health</option>
+          <option value="food">🍕 Food</option>
+          <option value="travel">✈️ Travel</option>
+          <option value="sports">⚽ Sports</option>
+          <option value="art">🎨 Art</option>
+          <option value="learning">🧠 Learning</option>
+          <option value="news">📰 News</option>
+          <option value="memes">😂 Memes</option>
+        </select>
+        <textarea id="globalMessageInput" placeholder="Share something with the world..." maxlength="2000"
+          rows="1"></textarea>
+        <button id="sendGlobalBtn" class="global-send-btn" title="Send">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal" id="confirmModal">
+    <div class="modal-content confirm-modal-content">
+      <div class="modal-header">
+        <h3 id="confirmTitle">Confirm Action</h3>
+        <button class="close-modal" id="closeConfirmModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmMessage">Are you sure you want to proceed?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="confirmCancelBtn">Cancel</button>
+        <button class="btn btn-danger" id="confirmActionBtn">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Worker Registration for PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('./sw.js')
+          .then((reg) => {
+            console.log('Service Worker registered', reg);
+            setInterval(() => {
+              reg.update();
+            }, 60000);
+          })
+          .catch((err) =>
+            console.log('Service Worker registration failed', err)
+          );
+      });
+    }
+  </script>
+
+  <!-- Firebase -->
+  <script type="module" src="js/firebase-config.js"></script>
+
+  <!-- QR Code Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- App Scripts -->
+  <script type="module" src="js/auth-check.js"></script>
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/global.js"></script>
+  <script type="module" src="js/notifications.js"></script>
+</body>
+
+</html>

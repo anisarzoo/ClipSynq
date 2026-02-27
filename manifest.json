@@ -1,0 +1,92 @@
+{
+  "name": "ClipSynq - Message Sync Across Devices",
+  "short_name": "ClipSynq",
+  "description": "Sync messages instantly across all your devices",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "categories": ["productivity", "messaging"],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230ea5e9' width='540' height='720'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='256' fill='white'>💬</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'><rect fill='%230ea5e9' width='1280' height='720'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='256' fill='white'>💬</text></svg>",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "app.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "app.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "app.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230ea5e9' width='192' height='192' rx='45'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='96'>💬</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230ea5e9' width='192' height='192' rx='0'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='96'>💬</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%230ea5e9' width='512' height='512' rx='128'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='256'>💬</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Send Message",
+      "short_name": "Message",
+      "description": "Quickly send a new message",
+      "url": "./index.html?action=new-message",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230ea5e9' width='192' height='192' rx='45'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='96'>✏️</text></svg>",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "View Starred",
+      "short_name": "Starred",
+      "description": "View your starred messages",
+      "url": "./index.html?action=starred",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230ea5e9' width='192' height='192' rx='45'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='96'>⭐</text></svg>",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}
