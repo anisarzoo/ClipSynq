@@ -407,6 +407,8 @@
 
     .device-name {
         font-size: 13px;
+        white-space: normal;
+        word-break: break-word;
     }
 
     .device-status {
@@ -656,6 +658,7 @@
     background: white;
     border-top: 1px solid #e2e8f0;
     padding: 8px 12px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 12px));
     display: flex;
     gap: 8px;
     align-items: center;
@@ -704,25 +707,25 @@
 }
 
 #messageInput::-webkit-scrollbar {
-    width: 6px;
+    width: 14px;
+    /* Increased from 6px to allow border */
     display: block;
 }
 
 #messageInput::-webkit-scrollbar-track {
     background: transparent;
-    margin: 2px 0;
+    margin: 4px 0;
 }
 
 #messageInput::-webkit-scrollbar-thumb {
-    background: rgba(14, 165, 233, 0.4);
-    border-radius: 3px;
-    border: 1px solid transparent;
-    background-clip: padding-box;
+    background-color: rgba(14, 165, 233, 0.4);
+    border-radius: 10px;
+    border: 4px solid transparent;
+    background-clip: content-box;
 }
 
 #messageInput::-webkit-scrollbar-thumb:hover {
-    background: rgba(14, 165, 233, 0.6);
-    background-clip: padding-box;
+    background-color: rgba(14, 165, 233, 0.6);
 }
 
 /* Global scrollbar styling for messages list */
@@ -813,14 +816,15 @@
 @media (max-width: 480px) {
     .input-container {
         padding: 6px 10px;
+        padding-bottom: calc(6px + env(safe-area-inset-bottom, 8px));
     }
 
     #messageInput {
         font-size: 16px;
         /* Prevent iOS zoom */
-        padding: 7px 12px;
-        height: 36px;
-        min-height: 36px;
+        padding: 7px 14px;
+        height: 38px;
+        min-height: 38px;
         max-height: 90px;
         border-radius: 18px;
     }
@@ -847,6 +851,7 @@
 @media (max-width: 360px) {
     .input-container {
         padding: 6px 8px;
+        padding-bottom: calc(6px + env(safe-area-inset-bottom, 6px));
     }
 
     #messageInput {
